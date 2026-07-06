@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Generado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .ticket {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .ticket-number {
+            font-size: 72px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .info {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 10px;
+        }
+        .info-item {
+            margin-bottom: 12px;
+            color: #555;
+        }
+        .info-item strong {
+            color: #333;
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <h2>Turno Generado</h2>
+        <div class="ticket-number" th:text="${turno.numeroTurno}"></div>
+        <div class="info">
+            <div class="info-item"><strong>Cliente:</strong> <span th:text="${turno.nombreCliente}"></span></div>
+            <div class="info-item"><strong>DNI:</strong> <span th:text="${turno.dni}"></span></div>
+            <div class="info-item"><strong>Trámite:</strong> <span th:text="${tipoTramite.nombre}"></span></div>
+            <div class="info-item"><strong>Fecha:</strong> <span th:text="${#temporals.format(turno.fechaRegistro, 'dd/MM/yyyy HH:mm')}"></span></div>
+        </div>
+        <a th:href="@{/confirmar/{numero}(numero=${turno.numeroTurno})}">
+            <button>Confirmar Asistencia</button>
+        </a>
+        <a th:href="@{/seleccion-tramite}">
+            <button class="secondary">Generar Nuevo Turno</button>
+        </a>
+    </div>
+</body>
+</html>

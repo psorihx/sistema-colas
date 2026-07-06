@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ver Turnos - Sistema de Colas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        .back-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+        .back-btn:hover {
+            background: #5a6fd8;
+        }
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background: #f8f9ff;
+            color: #333;
+            font-weight: 600;
+        }
+        .estado-en-espera {
+            background: #fff3cd;
+            color: #856404;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        .estado-en-atencion {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        .estado-finalizado {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Lista de Turnos</h1>
+        <a href="/menu" class="back-btn">← Volver al Menú</a>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Cliente</th>
+                    <th>DNI</th>
+                    <th>Trámite</th>
+                    <th>Estado</th>
+                    <th>Fecha Registro</th>
+                    <th>Ventanilla</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="turno : ${turnos}">
+                    <td th:text="${turno.numeroTurno}"></td>
+                    <td th:text="${turno.nombreCliente}"></td>
+                    <td th:text="${turno.dni}"></td>
+                    <td th:text="${tipoTramiteMap[turno.idTipo]}"></td>
+                    <td>
+                        <span th:if="${turno.estado == 'EN_ESPERA'}" class="estado-en-espera">En Espera</span>
+                        <span th:if="${turno.estado == 'EN_ATENCION'}" class="estado-en-atencion">En Atención</span>
+                        <span th:if="${turno.estado == 'FINALIZADO'}" class="estado-finalizado">Finalizado</span>
+                    </td>
+                    <td th:text="${#temporals.format(turno.fechaRegistro, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${turno.ventanilla != null ? turno.ventanilla : '-'}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

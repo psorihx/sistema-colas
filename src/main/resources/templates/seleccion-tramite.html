@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Colas - Seleccionar Trámite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .tramite-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .tramite-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tramite-card:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        .tramite-card.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        .tramite-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .tramite-card p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Colas</h1>
+        <form th:action="@{/generar-turno}" method="post">
+            <div class="form-group">
+                <label for="nombreCliente">Nombre Completo</label>
+                <input type="text" id="nombreCliente" name="nombreCliente" required placeholder="Ingrese su nombre">
+            </div>
+            <div class="form-group">
+                <label for="dni">DNI</label>
+                <input type="text" id="dni" name="dni" required placeholder="Ingrese su DNI" maxlength="8">
+            </div>
+            <div class="form-group">
+                <label>Seleccione el Trámite</label>
+                <div class="tramite-grid">
+                    <div class="tramite-card" th:each="tramite : ${tramites}" 
+                         th:attr="data-id=${tramite.id}" 
+                         th:onclick="'selectTramite(' + ${tramite.id} + ', this)'">
+                        <h3 th:text="${tramite.nombre}"></h3>
+                        <p th:text="${tramite.descripcion}"></p>
+                    </div>
+                </div>
+                <input type="hidden" id="idTipo" name="idTipo" required>
+            </div>
+            <button type="submit">Generar Turno</button>
+        </form>
+    </div>
+    <script>
+        let selectedTramite = null;
+        function selectTramite(id, element) {
+            document.querySelectorAll('.tramite-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            document.getElementById('idTipo').value = id;
+        }
+    </script>
+</body>
+</html>
